@@ -15,7 +15,7 @@ def process_img(img):
     x=x.reshape((1,48,48,1))
     return x
 
-model=keras.models.load_model("Models/Model_05.h5")
+model=keras.models.load_model("models/Model_05.h5")
 font = cv2.FONT_HERSHEY_SIMPLEX 
 fontScale = 1
 color = (0,0,255)
