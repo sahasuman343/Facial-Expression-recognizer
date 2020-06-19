@@ -91,19 +91,24 @@ model.add(Dropout(0.25))
 model.add(Dense(n, activation='softmax'))
 
 
-model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+#model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 
-#model=keras.models.load_model("images\best_model.h5")
+model=keras.models.load_model("best_model1.h5")
 #callbacks
 
-cb1=keras.callbacks.ModelCheckpoint("best_model1.h5",save_best_only=True)
-
+cb1=keras.callbacks.ModelCheckpoint("models/best_model1.h5",save_best_only=True,verbose=1)
+cb2=keras.callbacks.EarlyStopping(monitor='val_loss',
+                          min_delta=0,
+                          patience=3,
+                          verbose=1,
+                          restore_best_weights=True
+                          )
 
 #model hostory
 history=model.fit_generator(training_set,
                             steps_per_epoch=training_set.n//training_set.batch_size,
-                            epochs=25,
+                            epochs=10,
                             validation_data=valid_set,
                             validation_steps=valid_set.n//valid_set.batch_size,
-                            callbacks=[cb1]
+                            callbacks=[cb1,cb2]
                             )
