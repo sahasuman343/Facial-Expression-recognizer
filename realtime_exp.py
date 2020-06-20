@@ -30,14 +30,14 @@ while True:
     a=a+1
     _,frame=video.read()
     data.append(frame)
+    #for (x,y,w,h) in face_crop(frame):
+        #frame=cv2.rectangle(frame,(x,y),(x+w,y+h),color=color,thickness=thickness)
+        #img=frame[x:x+w,y:y+h]
     x=process_img(frame)
     class_name=model.predict_classes(x)
     frame=cv2.putText(frame,exp[class_name[0]],org, font,  
                    fontScale, color, thickness, cv2.LINE_AA)
     #print(face_crop(img))
-    #for (x,y,w,h) in face_crop(frame):
-        #frame=cv2.rectangle(frame,(x,y),(x+w,y+h),color=color,thickness=thickness)
-        #img=img[x:x+w,y:y+h]
     cv2.imshow("capturing",frame)
     label=exp[class_name[0]]
     expression.append(label)
