@@ -93,7 +93,7 @@ model.add(Dense(n, activation='softmax'))
 
 #model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 
-model=keras.models.load_model("best_model1.h5")
+#model=keras.models.load_model("best_model.h5")
 #callbacks
 
 cb1=keras.callbacks.ModelCheckpoint("models/best_model1.h5",save_best_only=True,verbose=1)
