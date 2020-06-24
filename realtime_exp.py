@@ -27,35 +27,32 @@ a=1
 data=[]
 expression=[]
 while True:
-    a=a+1
-    _,frame=video.read()
-    grey=cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
-    faces=face_crop(grey)
     
-    for (x,y,w,h) in faces:
-        cv2.rectangle(frame,(x,y),(x+w,y+h),color=color,thickness=thickness)
-        img=grey[x:x+w,y:y+h]
-        try:
-            if np.sum([img]) !=0:
-                img=cv2.resize(img,(48,48),interpolation=cv2.INTER_AREA)
-                data.append(img)
-                img=process_img(img)
-                class_name=model.predict_classes(img)
-                label=exp[class_name[0]]
-                expression.append(label)
-                cv2.putText(frame,label,org, font,  
-                            fontScale, color, thickness, cv2.LINE_AA)
-           # else:
-            #    cv2.putText(frame,"No Face :(",org, font,  
-             #               fontScale, color, thickness, cv2.LINE_AA)
+    _, frame = video.read()
+    gray = cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
+    faces = face_cascade.detectMultiScale(gray,1.3,5)
 
-        except Exception as e:
-            print("Broken Image!!")
-       
-    cv2.imshow("capturing",frame)
+    for (x,y,w,h) in faces:
+        cv2.rectangle(frame,(x,y),(x+w,y+h),(255,0,0),2)
+        img = gray[y:y+h,x:x+w]
+        img= cv2.resize(img,(48,48),interpolation=cv2.INTER_AREA)
+        if np.sum([img])!=0:
+            img = process_img(img)
+			
+            preds = model.predict(img)[0]
+            label=exp[preds.argmax()]
+            pos= (x,y)
+            data.append(img)
+            expression.append(label)
+            cv2.putText(frame,label,pos,cv2.FONT_HERSHEY_SIMPLEX,2,color,3)
+        else:
+            cv2.putText(frame,':(',org,cv2.FONT_HERSHEY_SIMPLEX,2,(0,255,0),3)
+    cv2.imshow('Capturing....',frame)
     key=cv2.waitKey(1)
-    if key==ord("q"):
-        df=pd.DataFrame({"Data":data, "Expression": expression})
+	
+    if key== ord('q'):
+        df=pd.DataFrame({"Image Data":data,
+                            "Label":expression})
         df.to_csv("facial_data.csv")
         break
 
