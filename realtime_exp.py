@@ -2,7 +2,7 @@ import cv2,time
 from tensorflow import keras
 import pandas as pd
 import numpy as np
-face_cascade=cv2.CascadeClassifier("F:\\Opencv_py\haarcascade_frontalface_default.xml")
+face_cascade=cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
 
 def face_crop(image):
     face=face_cascade.detectMultiScale(image,scaleFactor=1.05,minNeighbors=5)
